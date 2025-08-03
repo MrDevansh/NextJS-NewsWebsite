@@ -60,10 +60,17 @@ export default function ReportersPage() {
           >
             <div className="relative w-32 h-32 mb-4 rounded-full overflow-hidden border-4 border-slate-100 shadow-inner">
               <Image
-                src={rep.photoUrl || "/default-avatar.jpg"}
+                src={rep.photo || "/default-avatar.jpg"}
                 alt={rep.name}
-                layout="fill"
-                objectFit="cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover"
+                placeholder="blur"
+                blurDataURL="/default-avatar.jpg"
+                onError={(e) => {
+                  e.currentTarget.src = "/default-avatar.jpg";
+                }}
+                priority={false} // Set to true only for above-the-fold images
               />
             </div>
             <h2 className="text-lg font-bold mb-1">{rep.name}</h2>
