@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ImagePlus, FileText, User, Tag, Send } from "lucide-react";
 
 const categoryOptions = [
   "देश",
@@ -10,9 +11,6 @@ const categoryOptions = [
   "बस्ती",
   "राजनीति",
   "क्राइम",
-  "संपादकीय",
-  "रिपोर्टर",
-  "संपर्क",
 ];
 
 export default function AddNewsForm({ onNewsAdded }) {
@@ -36,11 +34,7 @@ export default function AddNewsForm({ onNewsAdded }) {
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
     setThumbnail(file);
-    if (file) {
-      setPreviewURL(URL.createObjectURL(file));
-    } else {
-      setPreviewURL(null);
-    }
+    setPreviewURL(file ? URL.createObjectURL(file) : null);
   };
 
   const handleSubmit = async (e) => {
@@ -53,9 +47,7 @@ export default function AddNewsForm({ onNewsAdded }) {
       Object.entries(formData).forEach(([key, value]) =>
         data.append(key, value)
       );
-      if (thumbnail) {
-        data.append("thumbnail", thumbnail);
-      }
+      if (thumbnail) data.append("thumbnail", thumbnail);
 
       const res = await fetch("/api/news", {
         method: "POST",
@@ -68,8 +60,7 @@ export default function AddNewsForm({ onNewsAdded }) {
       setFormData({ title: "", content: "", author: "", category: "" });
       setThumbnail(null);
       setPreviewURL(null);
-
-      if (onNewsAdded) onNewsAdded();
+      onNewsAdded?.();
     } catch (err) {
       console.error(err);
       setMessage("❌ Error adding news.");
@@ -79,9 +70,9 @@ export default function AddNewsForm({ onNewsAdded }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-[#e8f0fe] via-[#f3f9ff] to-[#ffffff] py-12 px-4">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-xl space-y-6">
-        <h2 className="text-3xl font-extrabold text-center text-teal-700 mb-6">
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-100 to-gray-200 py-12 px-4 text-gray-800">
+      <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
+        <h2 className="text-3xl font-bold text-center mb-6">
           📰 Add News Article
         </h2>
 
@@ -92,30 +83,30 @@ export default function AddNewsForm({ onNewsAdded }) {
         >
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">
-              Title
+            <label className="flex items-center text-sm text-gray-600 mb-1 gap-2">
+              <FileText size={18} /> Title
             </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
 
           {/* Content */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">
-              Content
+            <label className="flex items-center text-sm text-gray-600 mb-1 gap-2">
+              <FileText size={18} /> Content
             </label>
             <textarea
               name="content"
               value={formData.content}
               onChange={handleChange}
               rows={6}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
@@ -123,28 +114,28 @@ export default function AddNewsForm({ onNewsAdded }) {
           {/* Author & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Author
+              <label className="flex items-center text-sm text-gray-600 mb-1 gap-2">
+                <User size={18} /> Author
               </label>
               <input
                 type="text"
                 name="author"
                 value={formData.author}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Category
+              <label className="flex items-center text-sm text-gray-600 mb-1 gap-2">
+                <Tag size={18} /> Category
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               >
                 <option value="">-- Select Category --</option>
@@ -159,14 +150,14 @@ export default function AddNewsForm({ onNewsAdded }) {
 
           {/* Thumbnail Upload */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">
-              Thumbnail Image
+            <label className="flex items-center text-sm text-gray-600 mb-1 gap-2">
+              <ImagePlus size={18} /> Thumbnail Image
             </label>
             <input
               type="file"
               accept="image/*"
               onChange={handleThumbnailChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700"
             />
             {previewURL && (
               <div className="mt-3">
@@ -182,19 +173,22 @@ export default function AddNewsForm({ onNewsAdded }) {
           {/* Submit Button */}
           <button
             type="submit"
-            className={`w-full py-3 font-semibold text-white rounded-lg ${
+            className={`w-full py-3 font-semibold rounded-lg flex items-center justify-center gap-2 ${
               loading
-                ? "bg-gray-400"
-                : "bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-indigo-500 to-pink-500 text-white hover:from-indigo-600 hover:to-pink-600"
             } transition duration-300`}
             disabled={loading}
           >
-            {loading ? "Saving..." : "🚀 Submit News"}
+            <Send size={18} />
+            {loading ? "Saving..." : "Submit News"}
           </button>
 
           {/* Message */}
           {message && (
-            <p className="text-center text-sm mt-4 text-blue-600">{message}</p>
+            <p className="text-center text-sm mt-4 text-blue-600 font-medium">
+              {message}
+            </p>
           )}
         </form>
       </div>

@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Surya News | हिंदी समाचार",
+  title: "आवाज़-ए-पूर्वांचल | हिंदी समाचार",
   description: "Hindi News - Latest & Breaking",
    icons: {
     icon: "/favicon510.png",
