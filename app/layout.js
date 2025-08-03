@@ -15,7 +15,7 @@ export const metadata = {
   title: "आवाज़-ए-पूर्वांचल | हिंदी समाचार",
   description: "Hindi News - Latest & Breaking",
    icons: {
-    icon: "/favicon510.png",
+    icon: "/logo1.jpg",
   },
 };
 
